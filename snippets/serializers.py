@@ -27,4 +27,22 @@ class SnippetSerializer(serializers.Serializer):
         instance.language = validated_data.get('language', instance.language)
         instance.style = validated_data.get('style', instance.style)
         instance.save()
-        return instance
+        return instanceclass UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    # Serializers with many=True do not support multiple update by default, only multiple create.
+    # many=true 여야 다중속성을 시리얼라이즈화 할 수 있다.
+    # snippets 는 user 모델의 역관계라서 명시적으로 필드를 추가해줘야 한다.
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+    # Auth 인증 유저만
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    class Meta:
+        model = User
+        # Serializer에 새로운 필드가 추가되면 Meta 클래스의 fields에 추가해줘야한다.
+        fields = ['id', 'username', 'snippets', 'owner']
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
