@@ -53,6 +53,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'tutorial.urls'
 
 REST_FRAMEWORK = {
+    # DRF api view 에서의 Pagination
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
